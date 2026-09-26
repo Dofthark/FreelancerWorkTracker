@@ -1,0 +1,182 @@
+﻿@using FreelancerWorkTracker.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser? currentUser = null;
+
+    if (User.Identity?.IsAuthenticated == true)
+    {
+        currentUser = await UserManager.GetUserAsync(User);
+    }
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - FreelancerHub</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">F</div>
+
+                <div>
+                    <div class="brand-name">FreelancerHub</div>
+                    <div class="brand-subtitle">Work Manager</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="menu-item">
+
+                    <span class="menu-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a asp-controller="Projects"
+                   asp-action="Index"
+                   class="menu-item">
+
+                    <span class="menu-icon">▣</span>
+                    Projeler
+                </a>
+
+                <a asp-controller="Customers"
+                   asp-action="Index"
+                   class="menu-item">
+
+                    <span class="menu-icon">♙</span>
+                    Müşteriler
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-help">
+                    <strong>FreelancerHub</strong>
+                    <span>Projelerini tek yerden yönet.</span>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ANA ALAN -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <span class="topbar-label">Freelancer Yönetim Paneli</span>
+                </div>
+
+               @if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="profile">
+
+        <div class="profile-avatar">
+            @(string.IsNullOrWhiteSpace(currentUser?.FullName)
+                ? "F"
+                : currentUser.FullName.Substring(0, 1).ToUpper())
+        </div>
+
+        <div class="profile-info">
+
+            <strong>
+                @(currentUser?.FullName ?? "Freelancer")
+            </strong>
+
+            <small>
+                @(currentUser?.Email ?? "")
+            </small>
+
+        </div>
+
+        <form asp-controller="Account"
+              asp-action="Logout"
+              method="post"
+              class="logout-form">
+
+            <button type="submit"
+                    class="logout-button">
+                Çıkış Yap
+            </button>
+
+        </form>
+
+    </div>
+}
+
+            </header>
+
+            <div class="page-content">
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="success-toast" id="successToast">
+                        <div class="toast-icon">✓</div>
+
+                        <div>
+                            <strong>Başarılı</strong>
+                            <span>@TempData["SuccessMessage"]</span>
+                        </div>
+
+                        <button type="button"
+                                class="toast-close"
+                                onclick="closeToast()">
+                            ×
+                        </button>
+                    </div>
+                }
+
+                @RenderBody()
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+            function closeToast() {
+                const toast = document.getElementById("successToast");
+
+                if (toast) {
+                    toast.remove();
+                }
+            }
+
+            setTimeout(function () {
+                const toast = document.getElementById("successToast");
+
+                if (toast) {
+                    toast.style.opacity = "0";
+                    toast.style.transform = "translateX(30px)";
+                    toast.style.transition = "0.3s ease";
+
+                    setTimeout(function () {
+                        toast.remove();
+                    }, 300);
+                }
+            }, 3500);
+    </script>
+
+</body>
+</html>

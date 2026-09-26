@@ -1,0 +1,82 @@
+@model FreelancerWorkTracker.Models.Customer
+
+@{
+    ViewData["Title"] = "Müşteriyi Sil";
+}
+
+<div class="delete-page">
+
+    <div class="delete-card">
+
+        <div class="delete-icon">
+            !
+        </div>
+
+        <p class="page-eyebrow">
+            MÜŞTERİYİ SİL
+        </p>
+
+        <h1>
+            Bu müşteriyi silmek istediğine emin misin?
+        </h1>
+
+        <p class="delete-description">
+
+            <strong>@Model.Name</strong>
+            isimli müşteri kalıcı olarak silinecek.
+
+            Bu işlem geri alınamaz.
+
+        </p>
+
+
+        <div class="delete-project-info">
+
+            <div>
+                <span>E-posta</span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Email)
+                        ? "-"
+                        : Model.Email)
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Telefon</span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Phone)
+                        ? "-"
+                        : Model.Phone)
+                </strong>
+            </div>
+
+        </div>
+
+
+        <form asp-action="Delete">
+
+            <input type="hidden"
+                   asp-for="Id" />
+
+            <div class="delete-actions">
+
+                <a asp-action="Index"
+                   class="secondary-button">
+                    Vazgeç
+                </a>
+
+                <button type="submit"
+                        class="danger-button">
+                    Evet, Müşteriyi Sil
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

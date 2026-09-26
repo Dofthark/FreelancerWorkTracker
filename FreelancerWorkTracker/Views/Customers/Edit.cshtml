@@ -1,0 +1,136 @@
+@model FreelancerWorkTracker.Models.Customer
+
+@{
+    ViewData["Title"] = "Müşteriyi Düzenle";
+}
+
+<div class="form-page">
+
+    <div class="form-page-header">
+
+        <div>
+            <p class="page-eyebrow">MÜŞTERİ YÖNETİMİ</p>
+            <h1>Müşteriyi Düzenle</h1>
+            <p>Müşteri bilgilerini güncelle.</p>
+        </div>
+
+        <a asp-action="Index"
+           class="back-button">
+            ← Müşterilere Dön
+        </a>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <form asp-action="Edit">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger"></div>
+
+
+            <div class="form-section-title">
+
+                <span>Müşteri Bilgileri</span>
+
+                <small>
+                    Bilgileri düzenleyip değişiklikleri kaydet.
+                </small>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group full-width">
+
+                    <label asp-for="Name">
+                        Ad Soyad / Firma Adı
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control" />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger"></span>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label asp-for="Email">
+                        E-posta
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label asp-for="Phone">
+                        Telefon
+                    </label>
+
+                    <input asp-for="Phone"
+                           class="form-control" />
+
+                    <span asp-validation-for="Phone"
+                          class="text-danger"></span>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                    <label asp-for="Notes">
+                        Notlar
+                    </label>
+
+                    <textarea asp-for="Notes"
+                              class="form-control"
+                              rows="5"></textarea>
+
+                    <span asp-validation-for="Notes"
+                          class="text-danger"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <a asp-action="Index"
+                   class="secondary-button">
+                    İptal
+                </a>
+
+                <button type="submit"
+                        class="primary-button">
+                    Değişiklikleri Kaydet
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

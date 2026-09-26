@@ -1,0 +1,372 @@
+﻿@using FreelancerWorkTracker.Models
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard-header">
+
+    <div>
+        <p class="page-eyebrow">GENEL BAKIŞ</p>
+        <h1>Dashboard</h1>
+        <p>Projelerini, müşterilerini ve kazançlarını buradan takip edebilirsin.</p>
+    </div>
+
+    <a asp-controller="Projects"
+       asp-action="Create"
+       class="primary-button">
+        + Yeni Proje
+    </a>
+
+</div>
+
+
+<!-- İSTATİSTİKLER -->
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+            <span>Toplam Proje</span>
+            <div class="stat-icon">P</div>
+        </div>
+
+        <div class="stat-number">
+            @ViewBag.ProjectCount
+        </div>
+
+        <div class="stat-description">
+            Sistemde kayıtlı projeler
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+            <span>Aktif Proje</span>
+            <div class="stat-icon">A</div>
+        </div>
+
+        <div class="stat-number">
+            @ViewBag.ActiveProjectCount
+        </div>
+
+        <div class="stat-description">
+            Şu anda devam eden işler
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+            <span>Müşteriler</span>
+            <div class="stat-icon">M</div>
+        </div>
+
+        <div class="stat-number">
+            @ViewBag.CustomerCount
+        </div>
+
+        <div class="stat-description">
+            Toplam müşteri sayısı
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+            <span>Toplam Kazanç</span>
+            <div class="stat-icon">₺</div>
+        </div>
+
+        <div class="stat-number revenue-number">
+            @ViewBag.TotalRevenue.ToString("N0") ₺
+        </div>
+
+        <div class="stat-description">
+            Tamamlanan projeler
+        </div>
+
+    </div>
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <span>Bekleyen Ödeme</span>
+
+            <div class="stat-icon">
+                ₺
+            </div>
+
+        </div>
+
+        <div class="stat-number pending-number">
+
+            @ViewBag.PendingPayment.ToString("N0") ₺
+
+        </div>
+
+        <div class="stat-description">
+            Henüz tahsil edilmemiş tutar
+        </div>
+
+    </div>
+    <div class="stat-card overdue-card">
+
+        <div class="stat-top">
+
+            <span>Geciken Proje</span>
+
+            <div class="stat-icon overdue-icon">
+                !
+            </div>
+
+        </div>
+
+        <div class="stat-number overdue-number">
+            @ViewBag.OverdueProjects
+        </div>
+
+        <div class="stat-description">
+            Teslim tarihi geçmiş aktif projeler
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SON PROJELER -->
+
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+
+        <div>
+            <h2>Son Projeler</h2>
+            <p>En son oluşturduğun projeler.</p>
+        </div>
+
+        <a asp-controller="Projects"
+           asp-action="Index"
+           class="text-link">
+            Tümünü Gör →
+        </a>
+
+    </div>
+
+
+    @if (ViewBag.RecentProjects != null &&
+         ViewBag.RecentProjects.Count > 0)
+    {
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>PROJE</th>
+                        <th>MÜŞTERİ</th>
+                        <th>ÜCRET</th>
+                        <th>TESLİM</th>
+                        <th>DURUM</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var project in ViewBag.RecentProjects)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong>@project.Name</strong>
+                            </td>
+
+                            <td>
+                                @(project.Customer?.Name ?? "-")
+                            </td>
+
+                            <td>
+                                @project.Price.ToString("N0") ₺
+                            </td>
+
+                            <td>
+                                @project.Deadline.ToString("dd.MM.yyyy")
+                            </td>
+
+                            <td>
+
+                                @if (project.Status == ProjectStatus.Tamamlandi)
+                                {
+                                    <span class="status completed">
+                                        Tamamlandı
+                                    </span>
+                                }
+                                else if (project.Status == ProjectStatus.DevamEdiyor)
+                                {
+                                    <span class="status active">
+                                        Devam Ediyor
+                                    </span>
+                                }
+                                else if (project.Status == ProjectStatus.IptalEdildi)
+                                {
+                                    <span class="status cancelled">
+                                        İptal Edildi
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status waiting">
+                                        Bekliyor
+                                    </span>
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-icon">+</div>
+
+            <h3>Henüz proje yok</h3>
+
+            <p>
+                İlk projeni oluşturarak çalışmaya başlayabilirsin.
+            </p>
+
+            <a asp-controller="Projects"
+               asp-action="Create"
+               class="primary-button">
+                İlk Projeyi Oluştur
+            </a>
+
+        </div>
+    }
+    @{
+        var upcomingProjects =
+            ViewBag.UpcomingProjects as List<FreelancerWorkTracker.Models.Project>;
+    }
+
+    <div class="dashboard-panel deadline-panel">
+
+        <div class="panel-header">
+
+            <div>
+                <h2>Yaklaşan Teslimler</h2>
+                <p>Teslim tarihi yaklaşan projelerini takip et.</p>
+            </div>
+
+            <a asp-controller="Projects"
+               asp-action="Index"
+               class="text-link">
+                Tüm Projeler →
+            </a>
+
+        </div>
+
+
+        @if (upcomingProjects != null && upcomingProjects.Any())
+        {
+            <div class="deadline-list">
+
+                @foreach (var project in upcomingProjects)
+                {
+                    var remainingDays =
+                        (project.Deadline.Date - DateTime.Today).Days;
+
+                    <a asp-controller="Projects"
+                       asp-action="Details"
+                       asp-route-id="@project.Id"
+                       class="deadline-item">
+
+                        <div class="deadline-project">
+
+                            <div class="deadline-avatar">
+                                @(string.IsNullOrWhiteSpace(project.Name)
+                                    ? "?"
+                                    : project.Name.Substring(0, 1).ToUpper())
+                            </div>
+
+                            <div>
+                                <strong>@project.Name</strong>
+
+                                <span>
+                                    @(project.Customer?.Name ?? "Müşteri yok")
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="deadline-date">
+
+                            <span>
+                                @project.Deadline.ToString("dd.MM.yyyy")
+                            </span>
+
+                            @if (remainingDays == 0)
+                            {
+                                <strong class="deadline-today">
+                                    Bugün teslim
+                                </strong>
+                            }
+                            else if (remainingDays == 1)
+                            {
+                                <strong class="deadline-danger">
+                                    Yarın teslim
+                                </strong>
+                            }
+                            else if (remainingDays <= 3)
+                            {
+                                <strong class="deadline-danger">
+                                    @remainingDays gün kaldı
+                                </strong>
+                            }
+                            else if (remainingDays <= 7)
+                            {
+                                <strong class="deadline-warning">
+                                    @remainingDays gün kaldı
+                                </strong>
+                            }
+                            else
+                            {
+                                <strong class="deadline-normal">
+                                    @remainingDays gün kaldı
+                                </strong>
+                            }
+
+                        </div>
+
+                    </a>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="mini-empty-state">
+                Yaklaşan bir teslim bulunmuyor. ✨
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,101 @@
+@model FreelancerWorkTracker.Models.Customer
+
+@{
+    ViewData["Title"] = "Müşteri Detayları";
+}
+
+<div class="form-page">
+
+    <div class="form-page-header">
+        <div>
+            <p class="page-eyebrow">MÜŞTERİ DETAYI</p>
+            <h1>@Model.Name</h1>
+            <p>Müşteri bilgilerini görüntülüyorsun.</p>
+        </div>
+
+        <a asp-action="Index" class="back-button">
+            ← Müşterilere Dön
+        </a>
+    </div>
+
+
+    <div class="detail-card">
+
+        <div class="customer-detail-header">
+
+            <div class="customer-detail-profile">
+
+                <div class="customer-large-avatar">
+                    @(string.IsNullOrWhiteSpace(Model.Name)
+                        ? "?"
+                        : Model.Name.Substring(0, 1).ToUpper())
+                </div>
+
+                <div>
+                    <span class="detail-label">MÜŞTERİ</span>
+                    <h2>@Model.Name</h2>
+                    <p>@(string.IsNullOrWhiteSpace(Model.Email) ? "E-posta eklenmemiş" : Model.Email)</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="detail-grid">
+
+            <div class="detail-item">
+                <span>E-posta</span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Email)
+                        ? "-"
+                        : Model.Email)
+                </strong>
+            </div>
+
+
+            <div class="detail-item">
+                <span>Telefon</span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Phone)
+                        ? "-"
+                        : Model.Phone)
+                </strong>
+            </div>
+
+
+            <div class="detail-item detail-description">
+
+                <span>Notlar</span>
+
+                <p>
+                    @(string.IsNullOrWhiteSpace(Model.Notes)
+                        ? "Bu müşteri için henüz not eklenmemiş."
+                        : Model.Notes)
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <a asp-action="Index"
+               class="secondary-button">
+                Geri Dön
+            </a>
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="primary-button">
+                Müşteriyi Düzenle
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

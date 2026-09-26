@@ -1,0 +1,161 @@
+﻿@model IEnumerable<FreelancerWorkTracker.Models.Customer>
+
+@{
+    ViewData["Title"] = "Müşteriler";
+}
+
+<div class="dashboard-header">
+
+    <div>
+        <p class="page-eyebrow">MÜŞTERİ YÖNETİMİ</p>
+        <h1>Müşteriler</h1>
+        <p>Müşterilerini ve iletişim bilgilerini tek yerden yönet.</p>
+    </div>
+
+    <a asp-action="Create" class="primary-button">
+        + Yeni Müşteri
+    </a>
+
+</div>
+
+
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+
+        <div>
+            <h2>Müşteri Listesi</h2>
+            <p>Toplam @Model.Count() müşteri bulunuyor.</p>
+        </div>
+
+    </div>
+
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>MÜŞTERİ</th>
+                        <th>E-POSTA</th>
+                        <th>TELEFON</th>
+                        <th>NOTLAR</th>
+                        <th>İŞLEMLER</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <div class="customer-name-cell">
+
+                                    <div class="customer-avatar">
+                                        @(string.IsNullOrWhiteSpace(item.Name)
+                                            ? "?"
+                                            : item.Name.Substring(0, 1).ToUpper())
+                                    </div>
+
+                                    <strong>@item.Name</strong>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.Email))
+                                {
+                                    <span class="customer-email">
+                                        @item.Email
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="empty-value">—</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.Phone))
+                                {
+                                    @item.Phone
+                                }
+                                else
+                                {
+                                    <span class="empty-value">—</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.Notes))
+                                {
+                                    @(item.Notes.Length > 35
+                                        ? item.Notes.Substring(0, 35) + "..."
+                                        : item.Notes)
+                                }
+                                else
+                                {
+                                    <span class="empty-value">Not eklenmemiş</span>
+                                }
+                            </td>
+
+                            <td>
+
+                                <div class="action-buttons">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.Id"
+                                       class="action-btn details-btn">
+                                        Gör
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="action-btn edit-btn">
+                                        Düzenle
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.Id"
+                                       class="action-btn delete-btn">
+                                        Sil
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-icon">+</div>
+
+            <h3>Henüz müşteri bulunmuyor</h3>
+
+            <p>
+                İlk müşterini ekleyerek proje yönetimine başlayabilirsin.
+            </p>
+
+            <a asp-action="Create" class="primary-button">
+                + İlk Müşteriyi Ekle
+            </a>
+
+        </div>
+    }
+
+</div>

@@ -1,0 +1,298 @@
+@model IEnumerable<FreelancerWorkTracker.Models.Project>
+@using FreelancerWorkTracker.Models
+
+@{
+    ViewData["Title"] = "Projeler";
+}
+
+<div class="dashboard-header">
+    <div>
+        <p class="page-eyebrow">PROJE YÖNETİMİ</p>
+        <h1>Projeler</h1>
+        <p>Tüm projelerini, müşterilerini ve teslim tarihlerini buradan yönet.</p>
+    </div>
+
+    <a asp-action="Create" class="primary-button">
+        + Yeni Proje
+    </a>
+</div>
+
+<div class="dashboard-panel">
+
+    <div class="filter-bar">
+
+        <form method="get"
+              asp-action="Index"
+              class="filter-form">
+
+            <div class="search-box">
+
+                <span class="search-icon">⌕</span>
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       placeholder="Proje veya müşteri ara..." />
+
+            </div>
+
+            <select name="status"
+                    class="filter-select">
+
+                <option value="">Tüm Durumlar</option>
+
+                @foreach (var status in Enum.GetValues<FreelancerWorkTracker.Models.ProjectStatus>())
+                {
+                    if (ViewBag.Status != null &&
+                        ViewBag.Status.ToString() == status.ToString())
+                    {
+                        <option value="@status" selected>
+                            @status
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@status">
+                            @status
+                        </option>
+                    }
+                }
+
+            </select>
+
+            <button type="submit"
+                    class="filter-button">
+                Filtrele
+            </button>
+
+            @if (!string.IsNullOrWhiteSpace(ViewBag.Search) ||
+                 ViewBag.Status != null)
+            {
+                <a asp-action="Index"
+                   class="clear-filter">
+                    Temizle
+                </a>
+            }
+
+        </form>
+
+    </div>
+
+    <div class="panel-header">
+        <div>
+            <h2>Tüm Projeler</h2>
+            <p>Toplam @Model.Count() proje bulunuyor.</p>
+        </div>
+    </div>
+
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>PROJE</th>
+                        <th>MÜŞTERİ</th>
+                        <th>ÜCRET</th>
+                        <th>BAŞLANGIÇ</th>
+                        <th>TESLİM</th>
+                        <th>DURUM</th>
+                        <th>İŞLEMLER</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="project-name-cell">
+
+                                    <div class="project-avatar">
+                                        @item.Name.Substring(0, 1).ToUpper()
+                                    </div>
+
+                                    <div>
+
+                                        <strong>@item.Name</strong>
+
+                                        @if (!string.IsNullOrEmpty(item.Description))
+                                        {
+                                            <small>
+                                                @(item.Description.Length > 35
+                                                    ? item.Description.Substring(0, 35) + "..."
+                                                    : item.Description)
+                                            </small>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                @(item.Customer?.Name ?? "-")
+                            </td>
+
+
+                            <td>
+
+                                <strong class="price-text">
+                                    @item.Price.ToString("N0") ₺
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+                                @item.StartDate.ToString("dd.MM.yyyy")
+                            </td>
+
+
+                            <td>
+
+                                @{
+                                    var remainingDays =
+                                        (item.Deadline.Date - DateTime.Today).Days;
+
+                                    var isFinished =
+                                        item.Status == ProjectStatus.Tamamlandi ||
+                                        item.Status == ProjectStatus.IptalEdildi;
+                                }
+
+                                <div class="table-deadline">
+
+                                    <span>
+                                        @item.Deadline.ToString("dd.MM.yyyy")
+                                    </span>
+
+                                    @if (!isFinished)
+                                    {
+                                        if (remainingDays < 0)
+                                        {
+                                            <small class="deadline-overdue">
+                                                @Math.Abs(remainingDays) gün gecikti
+                                            </small>
+                                        }
+                                        else if (remainingDays == 0)
+                                        {
+                                            <small class="deadline-today">
+                                                Bugün teslim
+                                            </small>
+                                        }
+                                        else if (remainingDays <= 3)
+                                        {
+                                            <small class="deadline-danger">
+                                                @remainingDays gün kaldı
+                                            </small>
+                                        }
+                                        else if (remainingDays <= 7)
+                                        {
+                                            <small class="deadline-warning">
+                                                @remainingDays gün kaldı
+                                            </small>
+                                        }
+                                    }
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                @if (item.Status == ProjectStatus.Tamamlandi)
+                                {
+                                    <span class="status completed">
+                                        Tamamlandı
+                                    </span>
+                                }
+                                else if (item.Status == ProjectStatus.DevamEdiyor)
+                                {
+                                    <span class="status active">
+                                        Devam Ediyor
+                                    </span>
+                                }
+                                else if (item.Status == ProjectStatus.IptalEdildi)
+                                {
+                                    <span class="status cancelled">
+                                        İptal Edildi
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status waiting">
+                                        Bekliyor
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="action-buttons">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.Id"
+                                       class="action-btn details-btn"
+                                       title="Detaylar">
+                                        Gör
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="action-btn edit-btn"
+                                       title="Düzenle">
+                                        Düzenle
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.Id"
+                                       class="action-btn delete-btn"
+                                       title="Sil">
+                                        Sil
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-icon">✦</div>
+
+            <h3>Henüz proje bulunmuyor</h3>
+
+            <p>
+                İlk projeni oluşturarak proje takibine başlayabilirsin.
+            </p>
+
+            <a asp-action="Create"
+               class="primary-button">
+                + İlk Projeyi Oluştur
+            </a>
+
+        </div>
+    }
+
+</div>

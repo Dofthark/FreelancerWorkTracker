@@ -1,0 +1,137 @@
+@model FreelancerWorkTracker.Models.Project
+
+@{
+    ViewData["Title"] = "Projeyi Düzenle";
+}
+
+<div class="form-page">
+
+    <div class="form-page-header">
+        <div>
+            <p class="page-eyebrow">PROJE YÖNETİMİ</p>
+            <h1>Projeyi Düzenle</h1>
+            <p>Proje bilgilerini ve durumunu güncelle.</p>
+        </div>
+
+        <a asp-action="Index" class="back-button">
+            ← Projelere Dön
+        </a>
+    </div>
+
+    <div class="form-card">
+
+        <form asp-action="Edit">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger"></div>
+
+            <div class="form-section-title">
+                <span>Proje Bilgileri</span>
+                <small>Değişikliklerini yaptıktan sonra kaydet.</small>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group full-width">
+                    <label asp-for="Name">Proje Adı</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Description">Proje Açıklaması</label>
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomerId">Müşteri</label>
+
+                    <select asp-for="CustomerId"
+                            asp-items="ViewBag.CustomerId"
+                            class="form-select">
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price">Proje Ücreti</label>
+
+                    <div class="price-input">
+                        <input asp-for="Price" class="form-control" />
+                        <span>₺</span>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <label asp-for="PaidAmount">
+                        Tahsil Edilen
+                    </label>
+
+                    <div class="price-input">
+
+                        <input asp-for="PaidAmount"
+                               class="form-control" />
+
+                        <span>₺</span>
+
+                    </div>
+
+                    <small class="field-hint">
+                        Yeni ödeme geldikçe bu tutarı güncelleyebilirsin.
+                    </small>
+
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StartDate">Başlangıç Tarihi</label>
+                    <input asp-for="StartDate"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Deadline">Teslim Tarihi</label>
+                    <input asp-for="Deadline"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Status">Proje Durumu</label>
+
+                    <select asp-for="Status"
+                            asp-items="Html.GetEnumSelectList<FreelancerWorkTracker.Models.ProjectStatus>()"
+                            class="form-select">
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <a asp-action="Index"
+                   class="secondary-button">
+                    İptal
+                </a>
+
+                <button type="submit"
+                        class="primary-button">
+                    Değişiklikleri Kaydet
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

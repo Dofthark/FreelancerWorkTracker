@@ -1,0 +1,180 @@
+﻿@model FreelancerWorkTracker.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Hesap Oluştur";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="tr">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Hesap Oluştur | FreelancerHub</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-page">
+
+        <div class="auth-brand">
+
+            <div class="auth-logo">
+                F
+            </div>
+
+            <span>FreelancerHub</span>
+
+        </div>
+
+
+        <div class="auth-card">
+
+            <div class="auth-card-header">
+
+                <span class="auth-eyebrow">
+                    FREELANCERHUB'A KATIL
+                </span>
+
+                <h1>Hesap Oluştur</h1>
+
+                <p>
+                    Projelerini, müşterilerini ve ödemelerini
+                    tek panelden yönet.
+                </p>
+
+            </div>
+
+
+            <form asp-controller="Account"
+                  asp-action="Register"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="auth-validation"></div>
+
+
+                <div class="auth-form-group">
+
+                    <label asp-for="FullName">
+                        Ad Soyad
+                    </label>
+
+                    <input asp-for="FullName"
+                           class="auth-input"
+                           placeholder="Adın ve soyadın"
+                           autocomplete="name" />
+
+                    <span asp-validation-for="FullName"
+                          class="auth-field-error"></span>
+
+                </div>
+
+
+                <div class="auth-form-group">
+
+                    <label asp-for="Email">
+                        E-posta
+                    </label>
+
+                    <input asp-for="Email"
+                           class="auth-input"
+                           placeholder="ornek@mail.com"
+                           autocomplete="email" />
+
+                    <span asp-validation-for="Email"
+                          class="auth-field-error"></span>
+
+                </div>
+
+
+                <div class="auth-form-group">
+
+                    <label asp-for="Password">
+                        Şifre
+                    </label>
+
+                    <input asp-for="Password"
+                           class="auth-input"
+                           placeholder="En az 6 karakter"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="Password"
+                          class="auth-field-error"></span>
+
+                </div>
+
+
+                <div class="auth-form-group">
+
+                    <label asp-for="ConfirmPassword">
+                        Şifre Tekrar
+                    </label>
+
+                    <input asp-for="ConfirmPassword"
+                           class="auth-input"
+                           placeholder="Şifreni tekrar gir"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="auth-field-error"></span>
+
+                </div>
+
+
+                <button type="submit"
+                        class="auth-submit">
+
+                    Hesap Oluştur
+
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+
+            <div class="auth-footer">
+
+                <span>Zaten hesabın var mı?</span>
+
+                <a asp-controller="Account"
+                   asp-action="Login">
+                    Giriş yap
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <p class="auth-bottom-text">
+            İşlerini yönet. Zamanını kendine ayır.
+        </p>
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+﻿@model FreelancerWorkTracker.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+    Layout = null;
+
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<!DOCTYPE html>
+
+<html lang="tr">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Giriş Yap | FreelancerHub</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-page">
+
+        <div class="auth-brand">
+
+            <div class="auth-logo">
+                F
+            </div>
+
+            <span>FreelancerHub</span>
+
+        </div>
+
+
+        <div class="auth-card">
+
+            <div class="auth-card-header">
+
+                <span class="auth-eyebrow">
+                    TEKRAR HOŞ GELDİN
+                </span>
+
+                <h1>Giriş Yap</h1>
+
+                <p>
+                    Projelerini, müşterilerini ve ödemelerini
+                    yönetmeye devam et.
+                </p>
+
+            </div>
+
+
+            <form asp-controller="Account"
+                  asp-action="Login"
+                  asp-route-returnUrl="@returnUrl"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="auth-validation"></div>
+
+
+                <div class="auth-form-group">
+
+                    <label asp-for="Email">
+                        E-posta
+                    </label>
+
+                    <input asp-for="Email"
+                           class="auth-input"
+                           placeholder="ornek@mail.com"
+                           autocomplete="email" />
+
+                    <span asp-validation-for="Email"
+                          class="auth-field-error"></span>
+
+                </div>
+
+
+                <div class="auth-form-group">
+
+                    <label asp-for="Password">
+                        Şifre
+                    </label>
+
+                    <input asp-for="Password"
+                           class="auth-input"
+                           placeholder="Şifreni gir"
+                           autocomplete="current-password" />
+
+                    <span asp-validation-for="Password"
+                          class="auth-field-error"></span>
+
+                </div>
+
+
+                <div class="auth-options">
+
+                    <label class="remember-me">
+
+                        <input asp-for="RememberMe" />
+
+                        <span>Beni hatırla</span>
+
+                    </label>
+
+                </div>
+
+
+                <button type="submit"
+                        class="auth-submit">
+
+                    Giriş Yap
+
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+
+            <div class="auth-footer">
+
+                <span>Henüz hesabın yok mu?</span>
+
+                <a asp-controller="Account"
+                   asp-action="Register">
+                    Hesap oluştur
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <p class="auth-bottom-text">
+            Freelancer işlerini daha düzenli yönet.
+        </p>
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+
+</html>

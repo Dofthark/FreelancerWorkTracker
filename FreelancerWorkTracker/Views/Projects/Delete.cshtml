@@ -1,0 +1,60 @@
+@model FreelancerWorkTracker.Models.Project
+
+@{
+    ViewData["Title"] = "Projeyi Sil";
+}
+
+<div class="delete-page">
+
+    <div class="delete-card">
+
+        <div class="delete-icon">
+            !
+        </div>
+
+        <p class="page-eyebrow">PROJEYİ SİL</p>
+
+        <h1>Bu projeyi silmek istediğine emin misin?</h1>
+
+        <p class="delete-description">
+            <strong>@Model.Name</strong> projesi kalıcı olarak silinecek.
+            Bu işlem geri alınamaz.
+        </p>
+
+        <div class="delete-project-info">
+
+            <div>
+                <span>Müşteri</span>
+                <strong>@(Model.Customer?.Name ?? "-")</strong>
+            </div>
+
+            <div>
+                <span>Proje Ücreti</span>
+                <strong>@Model.Price.ToString("N0") ₺</strong>
+            </div>
+
+        </div>
+
+        <form asp-action="Delete">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="delete-actions">
+
+                <a asp-action="Index"
+                   class="secondary-button">
+                    Vazgeç
+                </a>
+
+                <button type="submit"
+                        class="danger-button">
+                    Evet, Projeyi Sil
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

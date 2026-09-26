@@ -1,0 +1,128 @@
+@model FreelancerWorkTracker.Models.Project
+@using FreelancerWorkTracker.Models
+
+@{
+    ViewData["Title"] = "Proje Detayları";
+}
+
+<div class="form-page">
+
+    <div class="form-page-header">
+
+        <div>
+            <p class="page-eyebrow">PROJE DETAYI</p>
+            <h1>@Model.Name</h1>
+            <p>Projenin tüm bilgilerini görüntülüyorsun.</p>
+        </div>
+
+        <a asp-action="Index"
+           class="back-button">
+            ← Projelere Dön
+        </a>
+
+    </div>
+
+    <div class="detail-card">
+
+        <div class="detail-header">
+
+            <div>
+                <span class="detail-label">PROJE</span>
+                <h2>@Model.Name</h2>
+            </div>
+
+            <div>
+                @if (Model.Status == ProjectStatus.Tamamlandi)
+                {
+                    <span class="status completed">Tamamlandı</span>
+                }
+                else if (Model.Status == ProjectStatus.DevamEdiyor)
+                {
+                    <span class="status active">Devam Ediyor</span>
+                }
+                else if (Model.Status == ProjectStatus.IptalEdildi)
+                {
+                    <span class="status cancelled">İptal Edildi</span>
+                }
+                else
+                {
+                    <span class="status waiting">Bekliyor</span>
+                }
+            </div>
+
+        </div>
+
+        <div class="detail-grid">
+
+            <div class="detail-item">
+                <span>Müşteri</span>
+                <strong>@(Model.Customer?.Name ?? "-")</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Proje Ücreti</span>
+                <strong class="detail-price">
+                    @Model.Price.ToString("N0") ₺
+                </strong>
+            </div>
+            <div class="detail-item">
+
+                <span>Tahsil Edilen</span>
+
+                <strong class="payment-paid">
+                    @Model.PaidAmount.ToString("N0") ₺
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span>Bekleyen Ödeme</span>
+
+                <strong class="payment-pending">
+                    @((Model.Price - Model.PaidAmount).ToString("N0")) ₺
+                </strong>
+
+            </div>
+
+            <div class="detail-item">
+                <span>Başlangıç Tarihi</span>
+                <strong>@Model.StartDate.ToString("dd.MM.yyyy")</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Teslim Tarihi</span>
+                <strong>@Model.Deadline.ToString("dd.MM.yyyy")</strong>
+            </div>
+
+            <div class="detail-item detail-description">
+                <span>Proje Açıklaması</span>
+
+                <p>
+                    @(string.IsNullOrWhiteSpace(Model.Description)
+                        ? "Bu proje için açıklama eklenmemiş."
+                        : Model.Description)
+                </p>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <a asp-action="Index"
+               class="secondary-button">
+                Geri Dön
+            </a>
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="primary-button">
+                Projeyi Düzenle
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
